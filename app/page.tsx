@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Flight, flights } from "./data/flightData"
+import { ThemeToggle } from "@/components/ThemeToggle"
 
 export default function FlightListPage() {
   const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null)
@@ -33,9 +34,17 @@ export default function FlightListPage() {
       })
   }, [flights, searchTerm, sortBy])
 
+  useEffect(() => {
+    const isDarkMode = localStorage.getItem('darkMode') === 'true'
+    document.documentElement.setAttribute('data-bs-theme', isDarkMode ? 'dark' : 'light')
+  }, [])
+
   return (
     <div className="container py-5">
-      <h1 className="text-center mb-5">Available Flights</h1>
+      <div className="d-flex justify-content-between align-items-center mb-5">
+        <h1 className="text-center">Available Flights</h1>
+        <ThemeToggle />
+      </div>
       <div className="row mb-4">
         <div className="col-md-6 mb-3 mb-md-0">
           <div className="input-group">
@@ -66,8 +75,7 @@ export default function FlightListPage() {
         {filteredAndSortedFlights.map((flight) => (
           <div key={flight.id} className="col">
             <div
-              className={`card h-100 ${selectedFlight?.id === flight.id ? "border-primary" : ""
-                }`}
+              className={`card h-100 ${selectedFlight?.id === flight.id ? "border-primary" : ""}`}
             >
               <div className="card-body">
                 <h5 className="card-title">
@@ -75,7 +83,7 @@ export default function FlightListPage() {
                   {flight.from} to {flight.to}
                 </h5>
                 <h6 className="card-subtitle mb-2 text-muted">
-                  Flight: {flight.id} | {flight.airline}
+                  Flight: {flight.id}
                 </h6>
                 <div className="mb-3">
                   <p className="card-text mb-1">
@@ -96,13 +104,10 @@ export default function FlightListPage() {
               </div>
               <div className="card-footer bg-transparent border-top-0">
                 <button
-                  className={`btn btn-outline-primary w-100 ${selectedFlight?.id === flight.id ? "active" : ""
-                    }`}
+                  className={`btn btn-outline-primary w-100 ${selectedFlight?.id === flight.id ? "active" : ""}`}
                   onClick={() => handleSelectFlight(flight)}
                 >
-                  {selectedFlight?.id === flight.id
-                    ? "Selected"
-                    : "Select Flight"}
+                  {selectedFlight?.id === flight.id ? "Selected" : "Select Flight"}
                 </button>
               </div>
             </div>
