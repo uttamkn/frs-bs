@@ -32,7 +32,7 @@ export default function FlightListPage() {
         if (sortBy === "departureTime") return new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime()
         return 0
       })
-  }, [flights, searchTerm, sortBy])
+  }, [searchTerm, sortBy])
 
   useEffect(() => {
     const isDarkMode = localStorage.getItem('darkMode') === 'true'
