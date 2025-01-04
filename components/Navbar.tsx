@@ -48,16 +48,6 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link href="/about" className="nav-link">
-                About
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link href="/contact" className="nav-link">
-                Contact
-              </Link>
-            </li>
-            <li className="nav-item">
               <button
                 className={`btn ${darkMode ? 'btn-light' : 'btn-dark'} ms-2`}
                 onClick={toggleDarkMode}
