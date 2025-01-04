@@ -1,30 +1,37 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
 export function ThemeToggle() {
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const isDarkMode = localStorage.getItem('darkMode') === 'true'
-    setDarkMode(isDarkMode)
-    updateTheme(isDarkMode)
-  }, [])
+    if (typeof window !== "undefined" && window.localStorage) {
+      const storedDarkMode = localStorage.getItem("darkMode") === "true";
+      setDarkMode(storedDarkMode);
+      updateTheme(storedDarkMode);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateTheme(darkMode);
+    localStorage.setItem("darkMode", darkMode.toString());
+  }, [darkMode]);
 
   const toggleDarkMode = () => {
-    const newDarkMode = !darkMode
-    setDarkMode(newDarkMode)
-    localStorage.setItem('darkMode', newDarkMode.toString())
-    updateTheme(newDarkMode)
-  }
+    setDarkMode((prev) => !prev);
+  };
 
   const updateTheme = (isDarkMode: boolean) => {
-    document.documentElement.setAttribute('data-bs-theme', isDarkMode ? 'dark' : 'light')
-  }
+    document.documentElement.setAttribute(
+      "data-bs-theme",
+      isDarkMode ? "dark" : "light"
+    );
+  };
 
   return (
     <button
-      className={`btn ${darkMode ? 'btn-light' : 'btn-dark'}`}
+      className={`btn ${darkMode ? "btn-light" : "btn-dark"}`}
       onClick={toggleDarkMode}
     >
       {darkMode ? (
@@ -33,6 +40,5 @@ export function ThemeToggle() {
         <i className="bi bi-moon-fill"></i>
       )}
     </button>
-  )
+  );
 }
-
