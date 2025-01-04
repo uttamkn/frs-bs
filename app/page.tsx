@@ -1,43 +1,59 @@
-'use client'
+"use client";
 
-import { useState, useMemo, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Flight, flights } from "./data/flightData"
-import { ThemeToggle } from "@/components/ThemeToggle"
+import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Flight, flights } from "./data/flightData";
 
 export default function FlightListPage() {
-  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [sortBy, setSortBy] = useState("price")
-  const router = useRouter()
+  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("price");
+  const router = useRouter();
 
   const handleSelectFlight = (flight: Flight) => {
-    setSelectedFlight(flight)
-  }
+    setSelectedFlight((prev) => (prev?.id === flight.id ? null : flight));
+  };
+
+  useEffect(() => {
+    if (selectedFlight !== null) {
+      const selectedElement = document.getElementById("selected");
+      if (selectedElement) {
+        selectedElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [selectedFlight]);
 
   const handleProceedToSeatSelection = () => {
     if (selectedFlight) {
-      router.push(`/seat-selection?flightId=${selectedFlight.id}`)
+      router.push(`/seat-selection?flightId=${selectedFlight.id}`);
     }
-  }
+  };
 
   const filteredAndSortedFlights = useMemo(() => {
     return flights
-      .filter(flight =>
-        flight.from.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        flight.to.toLowerCase().includes(searchTerm.toLowerCase())
+      .filter(
+        (flight) =>
+          flight.from.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          flight.to.toLowerCase().includes(searchTerm.toLowerCase()),
       )
       .sort((a, b) => {
-        if (sortBy === "price") return a.price - b.price
-        if (sortBy === "departureTime") return new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime()
-        return 0
-      })
-  }, [searchTerm, sortBy])
+        if (sortBy === "price") return a.price - b.price;
+        if (sortBy === "departureTime")
+          return (
+            new Date(a.departureTime).getTime() -
+            new Date(b.departureTime).getTime()
+          );
+        return 0;
+      });
+  }, [searchTerm, sortBy]);
 
   useEffect(() => {
-    const isDarkMode = localStorage.getItem('darkMode') === 'true'
-    document.documentElement.setAttribute('data-bs-theme', isDarkMode ? 'dark' : 'light')
-  }, [])
+    const isDarkMode = localStorage.getItem("darkMode") === "true";
+    document.documentElement.setAttribute(
+      "data-bs-theme",
+      isDarkMode ? "dark" : "light",
+    );
+  }, []);
 
   return (
     <div className="container py-5">
@@ -106,7 +122,9 @@ export default function FlightListPage() {
                   className={`btn btn-outline-primary w-100 ${selectedFlight?.id === flight.id ? "active" : ""}`}
                   onClick={() => handleSelectFlight(flight)}
                 >
-                  {selectedFlight?.id === flight.id ? "Selected" : "Select Flight"}
+                  {selectedFlight?.id === flight.id
+                    ? "Selected"
+                    : "Select Flight"}
                 </button>
               </div>
             </div>
@@ -120,9 +138,11 @@ export default function FlightListPage() {
             {selectedFlight.from} to {selectedFlight.to}
           </p>
           <p className="mb-4">
-            Departure: {selectedFlight.departureTime} | Arrival: {selectedFlight.arrivalTime}
+            Departure: {selectedFlight.departureTime} | Arrival:{" "}
+            {selectedFlight.arrivalTime}
           </p>
           <button
+            id="selected"
             className="btn btn-primary btn-lg"
             onClick={handleProceedToSeatSelection}
           >
@@ -132,7 +152,5 @@ export default function FlightListPage() {
         </div>
       )}
     </div>
-  )
+  );
 }
-
-
