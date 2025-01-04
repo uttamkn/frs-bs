@@ -50,9 +50,22 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
+              <Link href="/about" className="nav-link">
+                About
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/contact" className="nav-link">
+                Contact
+              </Link>
+            </li>
+            <li className="nav-item">
               <button
                 className={`btn ${darkMode ? "btn-light" : "btn-dark"} ms-2`}
                 onClick={toggleDarkMode}
+                aria-label={
+                  darkMode ? "Switch to light mode" : "Switch to dark mode"
+                }
               >
                 {darkMode ? (
                   <i className="bi bi-sun-fill"></i>
