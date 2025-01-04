@@ -1,9 +1,30 @@
-import React from "react";
+'use client'
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 const Navbar = () => {
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(isDarkMode);
+    updateTheme(isDarkMode);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('darkMode', newDarkMode.toString());
+    updateTheme(newDarkMode);
+  };
+
+  const updateTheme = (isDarkMode: boolean) => {
+    document.documentElement.setAttribute('data-bs-theme', isDarkMode ? 'dark' : 'light');
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-secondary">
+    <nav className={`navbar navbar-expand-lg ${darkMode ? 'navbar-dark bg-dark' : 'navbar-light bg-light'}`}>
       <div className="container">
         <Link href="/" className="navbar-brand">
           ✈️ Flight Finder
@@ -35,6 +56,18 @@ const Navbar = () => {
               <Link href="/contact" className="nav-link">
                 Contact
               </Link>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`btn ${darkMode ? 'btn-light' : 'btn-dark'} ms-2`}
+                onClick={toggleDarkMode}
+              >
+                {darkMode ? (
+                  <i className="bi bi-sun-fill"></i>
+                ) : (
+                  <i className="bi bi-moon-fill"></i>
+                )}
+              </button>
             </li>
           </ul>
         </div>
