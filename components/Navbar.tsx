@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -7,7 +7,7 @@ const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    const isDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(isDarkMode);
     updateTheme(isDarkMode);
   }, []);
@@ -15,18 +15,25 @@ const Navbar = () => {
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-    localStorage.setItem('darkMode', newDarkMode.toString());
+    localStorage.setItem("darkMode", newDarkMode.toString());
     updateTheme(newDarkMode);
   };
 
   const updateTheme = (isDarkMode: boolean) => {
-    document.documentElement.setAttribute('data-bs-theme', isDarkMode ? 'dark' : 'light');
+    document.documentElement.setAttribute(
+      "data-bs-theme",
+      isDarkMode ? "dark" : "light"
+    );
   };
 
   return (
-    <nav className={`navbar navbar-expand-lg ${darkMode ? 'navbar-dark bg-dark' : 'navbar-light bg-light'}`}>
+    <nav
+      className={`navbar navbar-expand-lg ${
+        darkMode ? "navbar-dark bg-dark" : "navbar-light bg-light"
+      }`}
+    >
       <div className="container">
-        <Link href="/" className="navbar-brand">
+        <Link href="/" className="navbar-brand fw-bold">
           ✈️ Flight Finder
         </Link>
         <button
@@ -43,13 +50,8 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link href="/" className="nav-link">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
               <button
-                className={`btn ${darkMode ? 'btn-light' : 'btn-dark'} ms-2`}
+                className={`btn ${darkMode ? "btn-light" : "btn-dark"} ms-2`}
                 onClick={toggleDarkMode}
               >
                 {darkMode ? (
