@@ -8,7 +8,7 @@ import { Flight, flights } from "../data/flightData";
 import { ArrowRight } from "lucide-react";
 
 const ROWS = 10;
-const SEATS_PER_ROW = 4;
+const SEATS_PER_ROW = 6;
 
 export default function SeatSelectionPage() {
   const [selectedSeats, setSelectedSeats] = useState<SeatInfo[]>([]);
