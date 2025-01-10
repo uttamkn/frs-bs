@@ -28,12 +28,12 @@ export default function AboutPage() {
               <h2 className="h3 card-title mb-3">Our Mission</h2>
               <p className="card-text">
                 At Flight Finder, our mission is to revolutionize the way people
-                search for and book flights. We're committed to providing a
+                search for and book flights. We&apos;re committed to providing a
                 seamless, user-friendly platform that offers unparalleled access
                 to a wide range of flight options at competitive prices. Our
                 goal is to make air travel more accessible, convenient, and
-                enjoyable for everyone, whether you're a frequent flyer or an
-                occasional traveler.
+                enjoyable for everyone, whether you&apos;re a frequent flyer or
+                an occasional traveler.
               </p>
             </div>
           </div>
@@ -109,9 +109,9 @@ export default function AboutPage() {
         <div className="col-md-8 text-center">
           <h2 className="h2 mb-4">Our Commitment to You</h2>
           <p className="lead mb-5">
-            At Flight Finder, we're more than just a flight search engine. We're
-            your trusted partner in travel, committed to providing you with the
-            best possible experience from start to finish.
+            At Flight Finder, we&apos;re more than just a flight search engine.
+            We&apos;re your trusted partner in travel, committed to providing
+            you with the best possible experience from start to finish.
           </p>
         </div>
       </div>
@@ -123,8 +123,8 @@ export default function AboutPage() {
             <div>
               <h3 className="h5 mb-2">Best Price Guarantee</h3>
               <p>
-                We're committed to offering the most competitive prices in the
-                market.
+                We&apos;re committed to offering the most competitive prices in
+                the market.
               </p>
             </div>
           </div>

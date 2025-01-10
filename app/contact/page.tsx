@@ -14,7 +14,7 @@ export default function ContactPage() {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -35,8 +35,8 @@ export default function ContactPage() {
         <div className="col-md-8 text-center">
           <h1 className="display-4 fw-bold mb-3">Get in Touch</h1>
           <p className="lead text-muted">
-            We're here to help and answer any question you might have. We look
-            forward to hearing from you!
+            We&apos;re here to help and answer any question you might have. We
+            look forward to hearing from you!
           </p>
         </div>
       </div>
