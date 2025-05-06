@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { SeatInfo } from "./types";
 import SeatInfoCard from "./SeatInfoCard";
 import { Flight, flights } from "../data/flightData";
@@ -15,10 +15,11 @@ export default function SeatSelectionPage() {
   const [currentSeat, setCurrentSeat] = useState<SeatInfo | null>(null);
   const [flight, setFlight] = useState<Flight | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const flightId = searchParams.get("flightId");
+    const params = new URLSearchParams(window.location.search);
+    const flightId = params.get("flightId");
+
     if (flightId) {
       const selectedFlight = flights.find((f) => f.id === flightId);
       if (selectedFlight) {
@@ -29,7 +30,7 @@ export default function SeatSelectionPage() {
     } else {
       router.push("/");
     }
-  }, [searchParams, router]);
+  }, [router]);
 
   const getSeatClass = (row: number) => {
     if (row <= 2) return "Business";
