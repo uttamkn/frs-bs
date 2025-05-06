@@ -58,7 +58,7 @@ export default function FlightListPage() {
   return (
     <div className="container py-5">
       <div className="d-flex justify-content-between align-items-center mb-5">
-        <h1 className="text-center">Available Flight</h1>
+        <h1 className="text-center">Available Flights</h1>
       </div>
       <div className="row mb-4">
         <div className="col-md-6 mb-3 mb-md-0">
