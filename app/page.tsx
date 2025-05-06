@@ -34,7 +34,7 @@ export default function FlightListPage() {
       .filter(
         (flight) =>
           flight.from.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          flight.to.toLowerCase().includes(searchTerm.toLowerCase()),
+          flight.to.toLowerCase().includes(searchTerm.toLowerCase())
       )
       .sort((a, b) => {
         if (sortBy === "price") return a.price - b.price;
@@ -51,14 +51,14 @@ export default function FlightListPage() {
     const isDarkMode = localStorage.getItem("darkMode") === "true";
     document.documentElement.setAttribute(
       "data-bs-theme",
-      isDarkMode ? "dark" : "light",
+      isDarkMode ? "dark" : "light"
     );
   }, []);
 
   return (
     <div className="container py-5">
       <div className="d-flex justify-content-between align-items-center mb-5">
-        <h1 className="text-center">Available Flights</h1>
+        <h1 className="text-center">Available Flight</h1>
       </div>
       <div className="row mb-4">
         <div className="col-md-6 mb-3 mb-md-0">
@@ -90,7 +90,9 @@ export default function FlightListPage() {
         {filteredAndSortedFlights.map((flight) => (
           <div key={flight.id} className="col">
             <div
-              className={`card h-100 ${selectedFlight?.id === flight.id ? "border-primary" : ""}`}
+              className={`card h-100 ${
+                selectedFlight?.id === flight.id ? "border-primary" : ""
+              }`}
             >
               <div className="card-body">
                 <h5 className="card-title">
@@ -119,7 +121,9 @@ export default function FlightListPage() {
               </div>
               <div className="card-footer bg-transparent border-top-0">
                 <button
-                  className={`btn btn-outline-primary w-100 ${selectedFlight?.id === flight.id ? "active" : ""}`}
+                  className={`btn btn-outline-primary w-100 ${
+                    selectedFlight?.id === flight.id ? "active" : ""
+                  }`}
                   onClick={() => handleSelectFlight(flight)}
                 >
                   {selectedFlight?.id === flight.id
