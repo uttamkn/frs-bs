@@ -2,14 +2,22 @@ pipeline {
   agent any
   tools {
     nodejs 'nodejs'
+    jdk 'jdk17'
   }
   environment {
+    JAVA_HOME = tool('jdk17')
+    PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     VERCEL_TOKEN = credentials('vercel-token')
     SONAR_TOKEN = credentials('sonarqube-credential')
     SCANNER_HOME = tool 'sonar_scanner'
 
   }
   stages {
+    stage('Verify Java Version') {
+      steps {
+        sh 'java -version'
+      }
+    }
     stage('Checkout') {
       steps {
         git url: 'https://github.com/frosthaern/frs-bs.git', branch: 'main', credentialsId: 'github-secret-token'
