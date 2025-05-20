@@ -1,40 +1,47 @@
 pipeline {
   agent any
+
   tools {
     nodejs 'nodejs'
     jdk 'jdk17'
+    // Ensure 'sonar_scanner' is configured in Jenkins Global Tool Configuration
   }
+
   environment {
     VERCEL_TOKEN = credentials('vercel-token')
     SONAR_TOKEN = credentials('sonarqube-credential')
     SCANNER_HOME = tool 'sonar_scanner'
-
   }
+
   stages {
     stage('Verify Java Version') {
       steps {
         sh 'java -version'
       }
     }
+
     stage('Checkout') {
       steps {
         git url: 'https://github.com/frosthaern/frs-bs.git', branch: 'main', credentialsId: 'github-secret-token'
       }
     }
-    
-      stage('Network Test') {
+
+    stage('Network Test') {
       steps {
         sh '''
-          # Show container networking information
+          echo "Container IP:"
           hostname -i
 
-          # Test connectivity to SonarQube container
-          echo "Testing connection to SonarQube"
-          ping -c 2 sonarqube || echo "Cannot ping SonarQube container by name"
+          echo "Testing connection to SonarQube by name:"
+          ping -c 2 sonarqube || echo "Cannot ping SonarQube by name"
+
+          echo "Testing connection to SonarQube by IP:"
           ping -c 2 172.18.0.2 || echo "Cannot ping SonarQube by IP"
 
-          # Try to reach SonarQube API
+          echo "Testing SonarQube API by hostname:"
           curl -I http://sonarqube:9000/api/system/status || echo "Cannot connect to SonarQube API by hostname"
+
+          echo "Testing SonarQube API by IP:"
           curl -I http://172.18.0.2:9000/api/system/status || echo "Cannot connect to SonarQube API by IP"
         '''
       }
@@ -42,41 +49,30 @@ pipeline {
 
     stage('SonarQube Analysis') {
       steps {
-        // Create a sonar-project.properties file with the correct parameters
-        sh '''
-          cat > sonar-project.properties << EOF
+        script {
+          // Create sonar-project.properties if not already in repo
+          writeFile file: 'sonar-project.properties', text: '''
 sonar.projectKey=frs-bs
 sonar.projectName=frs-bs
 sonar.sources=.
 sonar.sourceEncoding=UTF-8
-EOF
-        '''
+          '''.stripIndent()
 
-        withSonarQubeEnv('sonarqube_server') {
-          sh '''
-            # Set explicit Java options for SonarQube scanner
-            export SONAR_SCANNER_OPTS="-Djava.home=${JAVA_HOME}"
-
-            # Run SonarQube scanner with explicit URL by hostname
-            echo "Trying SonarQube scanner with hostname..."
-            ${SCANNER_HOME}/bin/sonar-scanner \\
-              -Dsonar.projectKey=frs-bs \\
-              -Dsonar.host.url=http://sonarqube:9000 \\
-              -Dsonar.token=${SONAR_TOKEN} \\
-              -X
-
-            # If that failed, try with IP address
-            echo "Trying SonarQube scanner with IP address..."
-            ${SCANNER_HOME}/bin/sonar-scanner \\
-              -Dsonar.projectKey=frs-bs \\
-              -Dsonar.host.url=http://172.18.0.2:9000 \\
-              -Dsonar.login=${SONAR_TOKEN} \\
-              -X
-          '''
+          withSonarQubeEnv('sonarqube_server') {
+            sh '''
+              export SONAR_SCANNER_OPTS="-Djava.home=${JAVA_HOME}"
+              ${SCANNER_HOME}/bin/sonar-scanner \
+                -Dsonar.projectKey=frs-bs \
+                -Dsonar.sources=. \
+                -Dsonar.host.url=http://sonarqube:9000 \
+                -Dsonar.token=${SONAR_TOKEN} \
+                -X
+            '''
+          }
         }
       }
     }
-    
+
     stage('Quality Gate') {
       steps {
         timeout(time: 5, unit: 'MINUTES') {
@@ -84,7 +80,13 @@ EOF
         }
       }
     }
-    
+
+    stage('Install Dependencies') {
+      steps {
+        sh 'npm ci'
+      }
+    }
+
     stage('Vercel Deployment') {
       steps {
         sh '''
@@ -94,6 +96,15 @@ EOF
           npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
         '''
       }
+    }
+  }
+
+  post {
+    failure {
+      echo 'Pipeline failed. Please check the stage logs above for details.'
+    }
+    success {
+      echo 'Pipeline completed successfully!'
     }
   }
 }
