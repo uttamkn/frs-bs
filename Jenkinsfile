@@ -86,12 +86,6 @@ sonar.sourceEncoding=UTF-8
       }
     }
 
-    stage('Install Dependencies') {
-      steps {
-        sh 'npm ci'
-      }
-    }
-
     stage('Vercel Deployment') {
       steps {
         sh '''
