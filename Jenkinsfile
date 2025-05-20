@@ -10,7 +10,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/frosthaern/frs-bs.git', branch: 'main', credentialsId: 'github-pat-token'
+        git url: 'https://github.com/frosthaern/frs-bs.git', branch: 'main', credentialsId: 'github-secret-token'
       }
     }
     
