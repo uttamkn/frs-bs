@@ -27,7 +27,11 @@ pipeline {
   stage('SonarQube Analysis') {
     steps {
       withSonarQubeEnv('sonarqube_server') {
-        sh '${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs'
+        sh '''
+                        export JAVA_HOME=${JAVA_HOME}
+                        export PATH=${JAVA_HOME}/bin:$PATH
+                        ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs
+        '''
       }
     }
   }
