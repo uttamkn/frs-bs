@@ -17,7 +17,7 @@ pipeline {
     stage('SonarQube Analysis') {
       steps {
         withSonarQubeEnv('sonarqube_server') {
-          sh 'sonar-scanner -Dsonar.projectKey=your-project'
+          sh 'sonar-scanner -Dsonar.projectKey=frs-bs'
         }
       }
     }
