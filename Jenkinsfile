@@ -33,7 +33,7 @@ pipeline {
             # Set explicit JDK options for SonarQube scanner
             export SONAR_SCANNER_OPTS="-Djava.home=${JAVA_HOME}"
 
-            ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs
+            ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs -X
       '''
       }
     }
