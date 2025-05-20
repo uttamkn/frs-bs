@@ -2,6 +2,7 @@ pipeline {
   agent any
   tools {
     nodejs 'nodejs'
+    sonarqube 'sonar_scanner'
   }
   environment {
     VERCEL_TOKEN = credentials('vercel-token')
