@@ -26,10 +26,14 @@ pipeline {
     steps {
       withSonarQubeEnv('sonarqube_server') {
        sh '''
-        export JAVA_HOME="${JAVA_HOME}"
-        export PATH="$JAVA_HOME/bin:$PATH"
-        java -version
-        ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs
+            export JAVA_HOME=${JAVA_HOME}
+            export PATH=${JAVA_HOME}/bin:${PATH}
+            java -version
+
+            # Set explicit JDK options for SonarQube scanner
+            export SONAR_SCANNER_OPTS="-Djava.home=${JAVA_HOME}"
+
+            ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs
       '''
       }
     }
