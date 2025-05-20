@@ -16,13 +16,13 @@ pipeline {
       }
     }
     
-    stage('SonarQube Analysis') {
-      steps {
-        withSonarQubeEnv('sonarqube_server') {
-          sh 'sonar-scanner -Dsonar.projectKey=frs-bs'
-        }
+  stage('SonarQube Analysis') {
+    steps {
+      withSonarQubeEnv('sonarqube_server') {
+        sh '${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs'
       }
     }
+  }
     
     stage('Quality Gate') {
       steps {
