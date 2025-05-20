@@ -63,7 +63,7 @@ EOF
               -Dsonar.projectKey=frs-bs \\
               -Dsonar.host.url=http://sonarqube:9000 \\
               -Dsonar.login=${SONAR_TOKEN} \\
-              -X || true
+              -X
 
             # If that failed, try with IP address
             echo "Trying SonarQube scanner with IP address..."
