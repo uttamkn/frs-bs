@@ -8,7 +8,7 @@ pipeline {
     environment {
         SONARQUBE_ENV = 'SonarQube-server' 
         SONARQUBE_TOKEN = credentials('sonar')
-        GITHUB_TOKEN = credentials('gh')
+        GITHUB_TOKEN = credentials('gh-token')
     }
 
     stages {
