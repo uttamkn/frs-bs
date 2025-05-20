@@ -46,6 +46,11 @@ pipeline {
         '''
       }
     }
+  stage('Install Dependencies') {
+      steps {
+        sh 'npm ci'
+      }
+    }
 
     stage('SonarQube Analysis') {
       steps {
@@ -59,15 +64,15 @@ sonar.sourceEncoding=UTF-8
           '''.stripIndent()
 
           withSonarQubeEnv('sonarqube_server') {
-            sh '''
-              export SONAR_SCANNER_OPTS="-Djava.home=${JAVA_HOME}"
-              ${SCANNER_HOME}/bin/sonar-scanner \
-                -Dsonar.projectKey=frs-bs \
-                -Dsonar.sources=. \
-                -Dsonar.host.url=http://sonarqube:9000 \
-                -Dsonar.token=${SONAR_TOKEN} \
-                -X
-            '''
+        sh '''
+          npx sonar \
+            -Dsonar.projectKey=frs-bs \
+            -Dsonar.projectName=frs-bs \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=http://sonarqube:9000 \
+            -Dsonar.token=$SONAR_TOKEN \
+            -Dsonar.sourceEncoding=UTF-8
+        '''
           }
         }
       }
