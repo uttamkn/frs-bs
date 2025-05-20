@@ -16,7 +16,7 @@ pipeline {
     
     stage('SonarQube Analysis') {
       steps {
-        withSonarQubeEnv('sonarqube') {
+        withSonarQubeEnv('sonarqube_server') {
           sh 'sonar-scanner -Dsonar.projectKey=your-project'
         }
       }
