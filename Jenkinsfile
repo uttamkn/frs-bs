@@ -25,11 +25,12 @@ pipeline {
   stage('SonarQube Analysis') {
     steps {
       withSonarQubeEnv('sonarqube_server') {
-        sh '''
-            echo "JAVA_HOME is: $JAVA_HOME"
-            java -version
-            ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs
-       '''
+       sh '''
+        export JAVA_HOME="${JAVA_HOME}"
+        export PATH="$JAVA_HOME/bin:$PATH"
+        java -version
+        ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs
+      '''
       }
     }
   }
