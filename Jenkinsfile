@@ -62,7 +62,7 @@ EOF
             ${SCANNER_HOME}/bin/sonar-scanner \\
               -Dsonar.projectKey=frs-bs \\
               -Dsonar.host.url=http://sonarqube:9000 \\
-              -Dsonar.login=${SONAR_TOKEN} \\
+              -Dsonar.token=${SONAR_TOKEN} \\
               -X
 
             # If that failed, try with IP address
