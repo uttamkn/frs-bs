@@ -5,8 +5,6 @@ pipeline {
     jdk 'jdk17'
   }
   environment {
-    JAVA_HOME = tool('jdk17')
-    PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     VERCEL_TOKEN = credentials('vercel-token')
     SONAR_TOKEN = credentials('sonarqube-credential')
     SCANNER_HOME = tool 'sonar_scanner'
@@ -28,10 +26,10 @@ pipeline {
     steps {
       withSonarQubeEnv('sonarqube_server') {
         sh '''
-                        export JAVA_HOME=${JAVA_HOME}
-                        export PATH=${JAVA_HOME}/bin:$PATH
-                        ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs
-        '''
+            echo "JAVA_HOME is: $JAVA_HOME"
+            java -version
+            ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=frs-bs
+       '''
       }
     }
   }
