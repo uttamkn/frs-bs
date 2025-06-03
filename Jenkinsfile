@@ -92,23 +92,18 @@ sonar.sourceEncoding=UTF-8
           // Install Vercel CLI
           sh 'npm install --save-dev vercel@latest'
           
-          // Check if .vercel directory exists
-          def vercelDirExists = fileExists('.vercel')
-          
-          if (vercelDirExists) {
-            // Use existing project configuration
-            sh '''
-              npx vercel link --yes --token=$VERCEL_TOKEN
-              npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-              npx vercel build --prod --token=$VERCEL_TOKEN
-              npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
-            '''
-          } else {
-            // For new projects (shouldn't happen since you've committed .vercel)
-            sh '''
-              npx vercel --prod --token=$VERCEL_TOKEN
-            '''
-          }
+          // Deploy directly without trying to link first
+          sh '''
+            # Set deployment URL as an environment variable for later use
+            DEPLOYMENT_URL=$(npx vercel --prod --token=$VERCEL_TOKEN --confirm 2>&1 | grep 'Preview:' | awk '{print $2}' || true)
+            
+            if [ -z "$DEPLOYMENT_URL" ]; then
+              echo "Failed to get deployment URL"
+              exit 1
+            fi
+            
+            echo "Deployment URL: $DEPLOYMENT_URL"
+          '''
         }
       }
     }
