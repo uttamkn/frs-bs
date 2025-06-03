@@ -5,11 +5,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  output: "export",
   images: {
     unoptimized: true,
   },
-  basePath: "/frs-bs",
 };
 
 module.exports = nextConfig;
