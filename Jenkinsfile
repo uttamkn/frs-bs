@@ -94,15 +94,26 @@ sonar.sourceEncoding=UTF-8
           
           // Deploy directly without trying to link first
           sh '''
-            # Set deployment URL as an environment variable for later use
-            DEPLOYMENT_URL=$(npx vercel --prod --token=$VERCEL_TOKEN --confirm 2>&1 | grep 'Preview:' | awk '{print $2}' || true)
+            # Run vercel deploy and capture full output
+            DEPLOY_OUTPUT=$(npx vercel --prod --token=$VERCEL_TOKEN --confirm 2>&1 || true)
             
+            # Extract deployment URL from the output
+            DEPLOYMENT_URL=$(echo "$DEPLOY_OUTPUT" | grep -E 'Preview:|Production:' | head -1 | awk '{print $NF}' | tr -d ' ' | tr -d '\\r' || true)
+            
+            # If no URL found, try alternative pattern
             if [ -z "$DEPLOYMENT_URL" ]; then
-              echo "Failed to get deployment URL"
+              DEPLOYMENT_URL=$(echo "$DEPLOY_OUTPUT" | grep -o 'https://[^ ]*' | head -1 || true)
+            fi
+            
+            # If still no URL, show error and exit
+            if [ -z "$DEPLOYMENT_URL" ]; then
+              echo "Failed to get deployment URL. Full output:"
+              echo "$DEPLOY_OUTPUT"
               exit 1
             fi
             
-            echo "Deployment URL: $DEPLOYMENT_URL"
+            echo "✅ Deployment successful!"
+            echo "🌐 Deployment URL: $DEPLOYMENT_URL"
           '''
         }
       }
