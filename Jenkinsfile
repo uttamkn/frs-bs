@@ -88,12 +88,28 @@ sonar.sourceEncoding=UTF-8
 
     stage('Vercel Deployment') {
       steps {
-        sh '''
-          npm install --save-dev vercel
-          npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-          npx vercel build --prod --token=$VERCEL_TOKEN
-          npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
-        '''
+        script {
+          // Install Vercel CLI
+          sh 'npm install --save-dev vercel@latest'
+          
+          // Check if .vercel directory exists
+          def vercelDirExists = fileExists('.vercel')
+          
+          if (vercelDirExists) {
+            // Use existing project configuration
+            sh '''
+              npx vercel link --yes --token=$VERCEL_TOKEN
+              npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+              npx vercel build --prod --token=$VERCEL_TOKEN
+              npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+            '''
+          } else {
+            // For new projects (shouldn't happen since you've committed .vercel)
+            sh '''
+              npx vercel --prod --token=$VERCEL_TOKEN
+            '''
+          }
+        }
       }
     }
   }
