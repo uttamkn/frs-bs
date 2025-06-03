@@ -1,0 +1,19 @@
+{
+  "routes": [
+    {
+      "route": "/frs-bs/*",
+      "serve": "/frs-bs/*"
+    },
+    {
+      "route": "/*",
+      "serve": "/frs-bs/index.html"
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/frs-bs/index.html",
+    "exclude": ["/frs-bs/images/*", "/frs-bs/static/*", "/*.{css,scss,js,png,gif,ico,jpg,svg}"]
+  },
+  "mimeTypes": {
+    ".json": "text/json"
+  }
+}
